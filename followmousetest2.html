@@ -1,0 +1,186 @@
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Mouse Follow 2</title>
+	<script src="js/jquery-1.9.1.min.js"></script>
+	<style type="text/css">
+
+		.noselect {
+		    -webkit-touch-callout: none;
+		    -webkit-user-select: none;
+		    -khtml-user-select: none;
+		    -moz-user-select: none;
+		    -ms-user-select: none;
+		    user-select: none;
+		}
+
+		.control{
+			border : 10px solid black;
+			width: 500px;
+			height: 500px;
+			position:absolute;
+		}
+
+		.control1{
+			border : 10px solid black;
+			width: 500px;
+			height: 500px;
+			position:absolute;
+		}
+
+		#moving_div,#follow_div{
+			position:absolute;
+			width:100px; 
+			height:100px;
+			background-color:red;
+			opacity:0.6;
+			vertical-align: middle;
+			top: 200px;
+			left: 200px;
+
+		}
+
+		#no2{
+			left:600px;
+		}
+
+	</style>
+</head>
+<body class = "noselect">
+	<div class = "control1">
+	<div id="moving_div"></div>
+	<p id = "test"></p>
+	<p id = "index"></p>
+	<p id = "1pos"></p>
+	</div>
+	<div class = "control" id = "no2">
+	<div id="follow_div"></div>
+	<p id="pos"></p>
+	</div>
+
+	<script type="text/javascript">
+
+		var $mouseX = 200, $mouseY = 200;
+		var $xp = 200, $yp = 200;
+		var test = "";
+
+		
+		$("#moving_div").mousedown(function(){
+		  		
+			  	// document.getElementById('test').innerHTML = "down";
+			  	mouseMoving();
+		  	
+	  	});
+		
+
+		$("#moving_div").mouseup(function(){
+			  	// document.getElementById('test').innerHTML = "up";
+			  	$(document).unbind("mousemove");
+		  	
+	  	});
+		
+
+
+		function mouseMoving(){
+			$(document).mousemove(function(e){
+			    $mouseX = e.pageX - 60;
+			    $mouseY = e.pageY - 60;    
+			});
+		}
+		var leftBefore = parseInt($("#follow_div").css("left"), 10);
+		var topBefore = parseInt($("#follow_div").css("top"),10);
+		var topTarget = 0;
+		var leftTarget = 0;
+		var $loop = setInterval(function(){
+			// change 12 to alter damping higher is slower
+			$xp += ($mouseX - $xp);
+			$yp += ($mouseY - $yp);
+
+
+			document.getElementById('index').innerHTML = "X : " + $mouseX + " Y : " + $mouseY;
+
+			if($xp > 460 && $yp > -40 && $yp < 460){
+				//RIGHT
+				document.getElementById('test').innerHTML = "right";
+				$("#moving_div").css({left: '460px', top:$yp +'px'});
+				$xp = 460;
+			}else if($yp > 460 && $xp < 460 && $xp > -40){
+				//DOWN
+				document.getElementById('test').innerHTML = "down";
+				$("#moving_div").css({left: $xp + 'px', top: '460px'});
+				$yp = 460;
+			}else if($xp < -40 && $yp < 460 && $yp > -40){
+				//LEFT
+				document.getElementById('test').innerHTML = "left";
+				$("#moving_div").css({left: '-40px', top:$yp +'px'});
+				$xp = -40;
+			}else if($yp < -40 && $xp < 460 && $xp > -40){
+				//UP
+				document.getElementById('test').innerHTML = "up";
+				// $("#moving_div").css({left: $xp + 'px', top: '-40px'});
+				$yp = -40;
+			}else if($yp < -40 && $xp > 460){
+				//UP RIGHT
+				document.getElementById('test').innerHTML = "up right";
+				// $("#moving_div").css({left: '460px', top: '-40px'});
+				$yp = -40;
+				$xp = 460;
+			}else if($yp > 460 && $xp > 460){
+				//DOWN LEFT
+				document.getElementById('test').innerHTML = "down left";
+				// $("#moving_div").css({left: '460px', top: '460px'});
+				$yp =460;
+				$xp = 460;
+			}else if($yp < -40 && $xp < -40){
+				//UP LEFT
+				document.getElementById('test').innerHTML = "up left";
+				// $("#moving_div").css({left: '-40px', top: '-40px'});
+				$xp = -40;
+				$yp = -40;
+			}else if($yp > 460 && $xp < -40){
+				//DOWN RIGHT
+				document.getElementById('test').innerHTML = "down right";
+				// $("#moving_div").css({left: '-40px', top: '460px'});
+				$yp = 460;
+				$xp = -40;
+			}
+
+			$("#moving_div").css({left:$xp +'px', top:$yp +'px'});
+			document.getElementById('1pos').innerHTML = "xp : " + $xp + " yp : " + $yp;
+			leftTarget = $xp;
+			topTarget = $yp;
+			
+
+		}, 30);
+
+		var fololoop = setInterval(function(){
+			var leftposition = parseInt($("#follow_div").css("left"), 10);
+			var topposition = parseInt($("#follow_div").css("top"),10);
+			var pos = document.getElementById('pos');
+			pos.innerHTML = "Left : " + leftposition + " Top : " + topposition + "<br/>";
+			if(leftposition != leftTarget)
+				if(leftposition < leftTarget)
+					leftposition ++;
+				else
+					leftposition--;
+			if(topposition != topTarget)
+				if(topposition < topTarget)
+					topposition ++;
+				else
+					topposition --;
+
+			pos.innerHTML += "funcLeft : " + leftposition + " funcTop : " + topposition + "<br/>";
+
+			pos.innerHTML += "xLeft : " + $xp + " yTop : " + $yp + "<br/>";
+
+			$("#follow_div").css({left: leftposition +'px', top: topposition +'px'});
+
+			pos.innerHTML += "Left : " + leftposition + " Top : " + topposition + "<br/>";
+
+
+
+		}, 20);
+
+	</script>
+</body>
+</html>

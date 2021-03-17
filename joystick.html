@@ -1,0 +1,307 @@
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Mouse Follow 2</title>
+	<script src="js/jquery-1.9.1.min.js"></script>
+	<style type="text/css">
+
+		.noselect {
+		    -webkit-touch-callout: none;
+		    -webkit-user-select: none;
+		    -khtml-user-select: none;
+		    -moz-user-select: none;
+		    -ms-user-select: none;
+		    user-select: none;
+		}
+
+		.control{
+			border : 10px solid black;
+			width: 500px;
+			height: 500px;
+			position:absolute;
+		}
+
+		.control1{
+			border : 10px solid black;
+			width: 150px;
+			height: 150px;
+			position:absolute;
+			top: 300px;
+			left: 200px;
+			border-radius: 150px;
+		}
+
+		#moving_div{
+			position:absolute;
+			width:150px; 
+			height:150px;
+			background-color:red;
+			opacity:0.6;
+			vertical-align: middle;
+			top: 200px;
+			left: 200px;
+			border-radius: 150px;
+		}
+
+		#follow_div{
+			position:absolute;
+			width:100px; 
+			height:100px;
+			background-color:red;
+			opacity:0.6;
+			vertical-align: middle;
+			top: 200px;
+			left: 200px;
+
+		}
+
+		#no2{
+			left:600px;
+		}
+
+	</style>
+</head>
+<body class = "noselect">
+	<div class = "control1">
+	<div id="moving_div"></div>
+	<p id = "test"></p>
+	<p id = "index"></p>
+	<p id = "1pos"></p>
+	<p id = "pressed"></p>
+	</div>
+	<div class = "control" id = "no2">
+	<div id="follow_div"></div>
+	<p id="pos"></p>
+	</div>
+
+	<script type="text/javascript">
+
+		var $mouseX = 0, $mouseY =0;
+		var $xp = 0, $yp = 0;
+		var test = "", reset = false;
+
+		
+		$("#moving_div").mousedown(function(){
+		  		
+		  	document.getElementById('pressed').innerHTML = "p down";
+		  	mouseMoving();
+		  	if(reset == true){
+		  		$loop = setInterval(function(){
+					controlLoop();
+				},30);
+		  	}
+
+	  	});
+		
+
+		$(window).mouseup(function(){
+			  	document.getElementById('pressed').innerHTML = "p up";
+			  	clearInterval($loop);
+			  	$xp = 0;
+			  	$yp = 0;
+			  	reset = true;
+			  	direction = "center";
+			  	$("#moving_div").css({left: $xp + 'px', top: $yp + 'px'});
+			  	$(document).unbind("mousemove");
+
+		  	
+	  	});
+		
+
+
+		function mouseMoving(){
+			$(document).mousemove(function(e){
+			    $mouseX = e.pageX - 280;
+			    $mouseY = e.pageY - 380;    
+			});
+		}
+		var direction = "";
+		var topTarget = 0;
+		var leftTarget = 0;
+
+		var $loop = setInterval(function(){
+				controlLoop();
+		},30);
+
+		var fololoop = setInterval(function(){
+					var ny = parseInt($("#follow_div").css("top"),10);
+					var nx = parseInt($("#follow_div").css("left"),10);
+					moveDiv(ny,nx);
+		}, 10);
+
+		function moveDiv(ny,nx){
+
+			var contained = ifContain("#follow_div","#no2");
+			document.getElementById('test').innerHTML = direction;
+
+			if(direction == "down" && contained.includes("downtrue")){
+				ny++; //Down
+				$('#follow_div').css("top", ny + "px" );
+		
+			}else if(direction == "up" && contained.includes("uptrue")){
+				ny --; //Up
+				$('#follow_div').css("top", ny + "px");
+
+			}else if(direction == "right" && contained.includes("righttrue")){
+				nx ++; //right
+				$('#follow_div').css("left", nx + "px");
+
+			}else if(direction =="left" && contained.includes("lefttrue")){
+				nx --; //left
+				$('#follow_div').css("left", nx + "px");
+
+			}else if(direction == "up right" && contained.includes("uptrue") && contained.includes("righttrue")){
+				ny--; //up right
+				nx++;
+				$('#follow_div').css("left", nx + "px");
+				$('#follow_div').css("top", ny + "px" );
+
+			}else if(direction == "up right" && contained.includes("uptrue") && !contained.includes("righttrue")){
+				ny--; //up right [UP]
+				$('#follow_div').css("top", ny + "px" );
+
+			}else if(direction == "up right" && !contained.includes("uptrue") && contained.includes("righttrue")){
+				nx++; //up right [RIGHT]
+				$('#follow_div').css("left", nx + "px");
+
+			}else if(direction == "down left" && contained.includes("downtrue") && contained.includes("lefttrue")){
+				ny++;//down left
+				nx--;
+				$('#follow_div').css("left", nx + "px");
+				$('#follow_div').css("top", ny + "px" );
+			}else if(direction == "down left" && contained.includes("downtrue") && !contained.includes("lefttrue")){
+				ny++;//down left [DOWN]
+				$('#follow_div').css("top", ny + "px" );
+			}else if(direction == "down left" && !contained.includes("downtrue") && contained.includes("lefttrue")){
+				nx--;//down left [LEFT]
+				$('#follow_div').css("left", nx + "px");
+			}else if(direction == "up left" && contained.includes("uptrue") && contained.includes("lefttrue")){
+				ny--; //up left
+				nx--;
+				$('#follow_div').css("left", nx + "px");
+				$('#follow_div').css("top", ny + "px" );
+			}else if(direction == "up left" && contained.includes("uptrue") && !contained.includes("lefttrue")){
+				ny--; //up left [UP]
+				$('#follow_div').css("top", ny + "px" );
+			}else if(direction == "up left" && !contained.includes("uptrue") && contained.includes("lefttrue")){
+				nx--;//up left [LEFT]
+				$('#follow_div').css("left", nx + "px");
+			}else if(direction == "down right" && contained.includes("downtrue") && contained.includes("righttrue")){
+				ny++; //down right
+				nx++;
+				$('#follow_div').css("left", nx + "px");
+				$('#follow_div').css("top", ny + "px" );
+			}else if(direction == "down right" && contained.includes("downtrue") && !contained.includes("righttrue")){
+				ny++; //down right [DOWN]
+				$('#follow_div').css("top", ny + "px" );
+			}else if(direction == "down right" && !contained.includes("downtrue") && contained.includes("righttrue")){
+				nx++; //down right [RIGHT]
+				$('#follow_div').css("left", nx + "px");
+			}
+
+		}
+
+		function ifContain(a,b){
+
+			//a = object
+			//b = container
+
+			var ax = parseInt($(a).css("left"), 10);
+			var ay = parseInt($(a).css("top"),10);
+			var aw = parseInt($(a).css("width"),10);
+			var al = parseInt($(a).css("height"),10);
+
+			var bw = parseInt($(b).css("width"),10);
+			var bl = parseInt($(b).css("height"),10);
+
+			var maxax = bw;
+			var maxay = bl;
+			var minax = 0;
+			var minay = 0;
+
+			var aright = ax + aw;
+			var adown = ay + al;
+
+			var directionTrue = "";
+
+			if(ax > minax){
+				directionTrue += "lefttrue ";
+			}
+			if(aright < maxax){
+				directionTrue += "righttrue ";
+			}
+			if(ay > minax){
+				directionTrue += "uptrue ";
+			}
+			if(adown < maxay){
+				directionTrue += "downtrue ";
+			}
+			return directionTrue;
+		}
+
+		function controlLoop(){
+
+			// change 12 to alter damping higher is slower
+			$xp += ($mouseX - $xp);
+			$yp += ($mouseY - $yp);
+
+
+			document.getElementById('index').innerHTML = "X : " + $mouseX + " Y : " + $mouseY;
+
+			if($xp > 50 && $yp > -50 && $yp < 50){
+				//RIGHT
+				direction = "right";
+				$("#moving_div").css({left: '50px', top:$yp +'px'});
+				$xp = 50;
+			}else if($yp > 50 && $xp < 50 && $xp > -50){
+				//DOWN
+				direction = "down";
+				$("#moving_div").css({left: $xp + 'px', top: '50px'});
+				$yp = 50;
+			}else if($xp < -50 && $yp < 50 && $yp > -50){
+				//LEFT
+				direction = "left";
+				$("#moving_div").css({left: '-50px', top:$yp +'px'});
+				$xp = -50;
+			}else if($yp < -50 && $xp < 50 && $xp > -50){
+				//UP
+				direction = "up";
+				// $("#moving_div").css({left: $xp + 'px', top: '-50px'});
+				$yp = -50;
+			}else if($yp < -50 && $xp > 50){
+				//UP RIGHT
+				direction = "up right";
+				// $("#moving_div").css({left: '50px', top: '-50px'});
+				$yp = -50;
+				$xp = 50;
+			}else if($yp > 50 && $xp > 50){
+				//DOWN RIGHT
+				direction = "down right";
+				// $("#moving_div").css({left: '50px', top: '50px'});
+				$yp =50;
+				$xp = 50;
+			}else if($yp < -50 && $xp < -50){
+				//UP LEFT
+				direction = "up left";
+				// $("#moving_div").css({left: '-50px', top: '-50px'});
+				$xp = -50;
+				$yp = -50;
+			}else if($yp > 50 && $xp < -50){
+				//DOWN LEFT
+				direction = "down left";
+				// $("#moving_div").css({left: '-50px', top: '50px'});
+				$yp = 50;
+				$xp = -50;
+			}else if(-50 < $yp < 50 && -50 < $xp < 50 ){
+				direction = "center";
+			}
+
+			$("#moving_div").css({left:$xp +'px', top:$yp +'px'});
+			document.getElementById('1pos').innerHTML = "xp : " + $xp + " yp : " + $yp;
+			leftTarget = $xp;
+			topTarget = $yp;
+		}
+
+	</script>
+</body>
+</html>

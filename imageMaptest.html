@@ -1,0 +1,129 @@
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Mouse Follow 2</title>
+	<script src="js/jquery-1.9.1.min.js"></script>
+	<style type="text/css">
+	#container {
+	    overflow:hidden;
+	}
+
+	#move_div1{
+		position: relative;
+		background-image: url("img/pngTest.png");
+		width: 2000px;
+		height: 1380px;
+		left: 0px;
+		top:0px;
+	}
+
+	</style>
+</head>
+<body>
+	<div id= "container" style = "border : 1px solid black; width : 500px; height : 500px;">
+	<div id = "move_div1"></div>
+	</div>
+
+	<script type="text/javascript">
+
+		var nx = 0;
+		var ny = 0;
+		var d = "";
+		var movingdiv = "";
+
+
+		$(document).keydown(function(e){
+
+			if(movingdiv == ""){
+				movingdiv = setInterval(moving, 60);
+			}
+
+			var key = e.which;
+
+			if(key == "40"){
+				d = "Down";
+			}else if(key == "38"){
+				d = "Up";
+			}else if(key == "39"){
+				d = "Right";
+			}else if(key == "37"){
+				d = "Left";
+			}
+
+		})
+
+		$(document).keyup(function(e){
+
+			clearInterval(movingdiv);
+			movingdiv = "";
+			d = "";
+
+		})
+
+		function moving(){
+
+			var maxD = maxMapMove("#move_div1");
+			var mapM = makeObject("#move_div1");
+
+			console.log(mapM.top, maxD.maxbottom);
+
+			if(d == "Right" && mapM.left != maxD.maxright){
+				nx -= 10; //right
+				$('#move_div1').css("left", nx + "px");
+			}else if(d =="Left" && mapM.left != maxD.maxleft){
+				nx += 10; //left
+				$('#move_div1').css("left", nx + "px");
+			}else if(d == "Up" && mapM.top != maxD.maxtop){
+				ny += 10; //left
+				$('#move_div1').css("top", ny + "px");
+			}else if(d =="Down" && mapM.top != maxD.maxbottom){
+				ny -= 10; //left
+				$('#move_div1').css("top", ny + "px");
+			}
+
+		}//end of moving()
+
+		function maxMapMove(a){
+
+			var ax = 0;
+			var ay = 0;
+			var aw = parseInt($(a).css("width"),10);
+			var al = parseInt($(a).css("height"),10);
+			var amx = ax - aw + 520;
+			var amy = ay - al + 520;
+			var obj = {
+				maxleft : ax,
+				maxright : amx,
+				maxtop : ay,
+				maxbottom : amy
+
+			};
+
+			return obj;
+		}
+
+		function makeObject(a){
+
+			var ax = parseInt($(a).css("left"), 10);
+			var ay = parseInt($(a).css("top"),10);
+			var aw = parseInt($(a).css("width"),10);
+			var al = parseInt($(a).css("height"),10);
+			var amx = ax + aw;
+			var amy = ay + al;
+
+
+			var obj = {
+				left : ax,
+				right : amx,
+				top : ay,
+				bottom : amy
+
+			};
+
+			return obj;
+		} 
+
+	</script>
+
+</body>
+</html>

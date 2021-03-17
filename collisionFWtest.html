@@ -1,0 +1,264 @@
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Mouse Follow 2</title>
+	<script src="js/jquery-1.9.1.min.js"></script>
+	<style type="text/css">
+
+		.noselect {
+		    -webkit-touch-callout: none;
+		    -webkit-user-select: none;
+		    -khtml-user-select: none;
+		    -moz-user-select: none;
+		    -ms-user-select: none;
+		    user-select: none;
+		}
+
+		.control{
+			border : 10px solid black;
+			width: 500px;
+			height: 500px;
+			position:absolute;
+		}
+
+		.control1{
+			border : 10px solid black;
+			width: 500px;
+			height: 500px;
+			position:absolute;
+		}
+
+		#player_div{
+			position:absolute;
+			width:100px; 
+			height:100px;
+			background-color:red;
+			opacity:0.6;
+			top: 200px;
+			left: 200px;
+
+		}
+
+		.zombie_div{
+			position:absolute;
+			width:100px; 
+			height:100px;
+			background-color:green;
+			opacity:0.6;
+			top: 0px;
+			left: 0px;
+
+		}
+
+		#no2{
+			left:600px;
+		}
+
+	</style>
+</head>
+<body class = "noselect">
+	<div class = "control1">
+	<div id="player_div"></div>
+	<div class ="zombie_div"></div>
+	<p id = "test"></p>
+	<p id = "index"></p>
+	<p id = "1pos"></p>
+	<p id="dtest"></p>
+	<p id="contTest"></p>
+	</div>
+	<div class = "control" id = "no2">
+	<p> Detail of zombie_div</p>
+	<p id="pos"></p>
+	<p id="ctest"></p>
+	<p id="colresult"></p>
+	</div>
+
+	<script type="text/javascript">
+
+		var $mouseX = 200, $mouseY = 200;
+		var $xp = 200, $yp = 200;
+		var test = "";
+
+		
+		$("#player_div").mousedown(function(){
+		  		
+			  	// document.getElementById('test').innerHTML = "down";
+			  	mouseMoving();
+			  	//Start the zombie chase
+			  	var chasingInterval =  setInterval(startChase,30);
+		  	
+	  	});
+		
+
+		$("#player_div").mouseup(function(){
+			  	// document.getElementById('test').innerHTML = "up";
+			  	clearInterval(chasingInterval);
+			  	// chasingInterval = 0;
+			  	// setInterval(startChase,30);
+		  	
+	  	});
+
+		function mouseMoving(){
+			$(document).mousemove(function(e){
+			    $mouseX = e.pageX - 60;
+			    $mouseY = e.pageY - 60;    
+			});
+		}
+		var leftBefore = parseInt($(".zombie_div").css("left"), 10);
+		var topBefore = parseInt($(".zombie_div").css("top"),10);
+		var topTarget = 0;
+		var leftTarget = 0;
+
+
+
+		var $loop = setInterval(function(){
+			// change 12 to alter damping higher is slower
+			$xp += ($mouseX - $xp);
+			$yp += ($mouseY - $yp);
+
+			document.getElementById('index').innerHTML = "X : " + $mouseX + " Y : " + $mouseY;
+
+			if($xp > 400 && $yp > 0 && $yp < 400){
+				//RIGHT
+				document.getElementById('test').innerHTML = "right";
+				$("#player_div").css({left: '400px', top:$yp +'px'});
+				$xp = 400;
+
+			}else if($yp > 400 && $xp < 400 && $xp > 0){
+				//DOWN
+				document.getElementById('test').innerHTML = "down";
+				$("#player_div").css({left: $xp + 'px', top: '400px'});
+				$yp = 400;
+
+			}else if($xp < 0 && $yp < 400 && $yp > 0){
+				//LEFT
+				document.getElementById('test').innerHTML = "left";
+				$("#player_div").css({left: '0px', top:$yp +'px'});
+				$xp = 0;
+
+			}else if($yp < 0 && $xp < 400 && $xp > 0){
+				//UP
+				document.getElementById('test').innerHTML = "up";
+				// $("#player_div").css({left: $xp + 'px', top: '0px'});
+				$yp = 0;
+
+			}else if($yp < 0 && $xp > 400){
+				//UP RIGHT
+				document.getElementById('test').innerHTML = "up right";
+				// $("#player_div").css({left: '400px', top: '0px'});
+				$yp = 0;
+				$xp = 400;
+
+			}else if($yp > 400 && $xp > 400){
+				//DOWN LEFT
+				document.getElementById('test').innerHTML = "down left";
+				// $("#player_div").css({left: '400px', top: '400px'});
+				$yp =400;
+				$xp = 400;
+
+			}else if($yp < 0 && $xp < 0){
+				//UP LEFT
+				document.getElementById('test').innerHTML = "up left";
+				// $("#player_div").css({left: '0px', top: '0px'});
+				$xp = 0;
+				$yp = 0;
+
+			}else if($yp > 400 && $xp < 0){
+				//DOWN RIGHT
+				document.getElementById('test').innerHTML = "down right";
+				// $("#player_div").css({left: '0px', top: '400px'});
+				$yp = 400;
+				$xp = 0;
+
+			}
+
+			$("#player_div").css({left:$xp +'px', top:$yp +'px'});
+			document.getElementById('1pos').innerHTML = "xp : " + $xp + " yp : " + $yp;
+
+			divSpace("#player_div","dtest");
+
+			leftTarget = $xp;
+			topTarget = $yp;
+			
+
+		}, 30);
+
+		function startChase(){
+
+				var leftposition = parseInt($(".zombie_div").css("left"), 10);
+				var topposition = parseInt($(".zombie_div").css("top"),10);
+				var pos = document.getElementById('pos');
+
+				pos.innerHTML = "Left : " + leftposition + " Top : " + topposition + "<br/>";
+
+				if(leftposition != leftTarget)
+					if(leftposition < leftTarget)
+						leftposition ++;
+					else
+						leftposition --;
+				if(topposition != topTarget)
+					if(topposition < topTarget)
+						topposition ++;
+					else
+						topposition --;
+
+				pos.innerHTML += "funcLeft : " + leftposition + " funcTop : " + topposition + "<br/>";
+				pos.innerHTML += "xLeft : " + $xp + " yTop : " + $yp + "<br/>";
+
+				$(".zombie_div").css({left: leftposition +'px', top: topposition +'px'});
+				pos.innerHTML += "Left : " + leftposition + " Top : " + topposition + "<br/>";
+
+				divSpace(".zombie_div","ctest");
+
+				var collide = isCollide(".zombie_div", "#player_div");
+
+				document.getElementById('colresult').innerHTML = "In Collide " + collide;
+
+				if(collide){
+					alert("REKT");
+					location.reload();
+				}
+
+
+		}
+
+		function divSpace(a,b){
+
+			var ax = parseInt($(a).css("left"), 10);
+			var ay = parseInt($(a).css("top"),10);
+			var aw = parseInt($(a).css("width"),10);
+			var al = parseInt($(a).css("height"),10);
+
+			var pxlength = ax + aw;
+			var pxheight = ay + al;
+
+			document.getElementById(b).innerHTML = "LEFT : " + ax + "<br/>TOP : " + ay + "<br/>Width : " + aw + "<br/>Height : " + al + "<br/>Total Width : " + pxlength + "<br/>Total Height : " + pxheight;
+
+
+
+		}
+
+		function isCollide(a, b) {
+			var ax = parseInt($(a).css("left"), 10);
+			var ay = parseInt($(a).css("top"),10);
+			var aw = parseInt($(a).css("width"),10);
+			var al = parseInt($(a).css("height"),10);
+
+			var bx = parseInt($(b).css("left"), 10);
+			var by = parseInt($(b).css("top"),10);
+			var bw = parseInt($(b).css("width"),10);
+			var bl = parseInt($(b).css("height"),10);
+
+		    return !(
+		        ((ay + al) < (by)) ||
+		        (ay > (by + bl)) ||
+		        ((ax + aw) < bx) ||
+		        (ax > (bx + bw))
+		    );
+		}
+
+		
+
+	</script>
+</body>
+</html>

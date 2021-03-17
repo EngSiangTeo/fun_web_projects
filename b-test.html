@@ -1,0 +1,340 @@
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>B testing</title>
+	<script src="js/jquery-1.9.1.min.js"></script>
+    <style type="text/css">
+    	.inputtxt{
+    		width:40px;
+    		height:40px;
+    	}
+    	#picked{
+    		position: absolute;
+    		left: 300px;
+    		text-align: center;
+    		width : 300px;
+    	}
+
+    	#randPicked,#pastPicked,#noPicked,#test,#result{
+    		text-align: center;
+    	}
+    </style>
+</head>
+<body>
+	<div>
+	<div id="picked">Picked Number : <p id = "randPicked">-</p><p id ="test"></p><p id = "pastPicked"></p><p id = "noPicked"></p><p id="result"></p></div>
+	<table>
+		<tr>
+			<td class = "row1 col1 dia1"><input type="number" class = "inputtxt" min="1" max ="25"/></td>
+			<td class = "row1 col2"><input type="number" class = "inputtxt" min="1" max ="25"/></td>
+			<td class = "row1 col3"><input type="number" class = "inputtxt" min="1" max ="25"/></td>
+			<td class = "row1 col4"><input type="number" class = "inputtxt" min="1" max ="25"/></td>
+			<td class = "row1 col5 dia2"><input type="number" class = "inputtxt" min="1" max ="25"/></td>
+		</tr>
+		<tr>
+			<td class = "row2 col1"><input type="number" class = "inputtxt" min="1" max ="25"/></td>
+			<td class = "row2 col2 dia1"><input type="number" class = "inputtxt" min="1" max ="25"/></td>
+			<td class = "row2 col3"><input type="number" class = "inputtxt" min="1" max ="25"/></td>
+			<td class = "row2 col4 dia2"><input type="number" class = "inputtxt" min="1" max ="25"/></td>
+			<td class = "row2 col5"><input type="number" class = "inputtxt" min="1" max ="25"/></td>
+		</tr>
+		<tr>
+			<td class = "row3 col1"><input type="number" class = "inputtxt" min="1" max ="25"/></td>
+			<td class = "row3 col2"><input type="number" class = "inputtxt" min="1" max ="25"/></td>
+			<td class = "row3 col3 dia1 dia2"><input type="number" class = "inputtxt" min="1" max ="25"/></td>
+			<td class = "row3 col4"><input type="number" class = "inputtxt" min="1" max ="25"/></td>
+			<td class = "row3 col5"><input type="number" class = "inputtxt" min="1" max ="25"/></td>
+		</tr>
+		<tr>
+			<td class = "row4 col1"><input type="number" class = "inputtxt" min="1" max ="25"/></td>
+			<td class = "row4 col2 dia2"><input type="number" class = "inputtxt" min="1" max ="25"/></td>
+			<td class = "row4 col3"><input type="number" class = "inputtxt" min="1" max ="25"/></td>
+			<td class = "row4 col4 dia1"><input type="number" class = "inputtxt" min="1" max ="25"/></td>
+			<td class = "row4 col5"><input type="number" class = "inputtxt" min="1" max ="25"/></td>
+		</tr>
+		<tr>
+			<td class = "row5 col1 dia2"><input type="number" class = "inputtxt" min="1" max ="25"/></td>
+			<td class = "row5 col2"><input type="number" class = "inputtxt" min="1" max ="25"/></td>
+			<td class = "row5 col3"><input type="number" class = "inputtxt" min="1" max ="25"/></td>
+			<td class = "row5 col4"><input type="number" class = "inputtxt" min="1" max ="25"/></td>
+			<td class = "row5 col5 dia1"><input type="number" class = "inputtxt" min="1" max ="25"/></td>
+		</tr>
+	</table>
+	<button id = "valBtn" onClick = "runValidate()">Validate</button>
+	<button id = "genBtn" onClick = "generate()">Generate</button>
+	<button onClick = "randPicker()">Get a Number</button>
+	</div>
+	<script type="text/javascript">
+
+		var inputArr = document.getElementsByClassName("inputtxt");
+		var test = document.getElementById('test');
+		var numCleared = document.getElementById('cleared');
+		var randomNum = document.getElementById('randPicked');
+		var prevNum = document.getElementById('pastPicked');
+		var result = document.getElementById('result');
+		var notPicked = document.getElementById('noPicked');
+
+		var successful = false;
+		var randArr = [];
+		for(var i = 1; i < 26; i ++){
+			randArr.push(i);
+		}
+
+	
+		function runValidate(){
+
+			successful = validate();
+
+		}
+
+
+		function validate(){
+
+			var genArr = [];
+			for(var i = 1; i < 26; i ++){
+				genArr.push(i);
+			}
+			var checkArr = [];
+			var dupCheck = false;
+			var success = true;
+			test.innerHTML = "";
+			
+			for(var i = 0; i < inputArr.length; i++){
+
+				if(inputArr[i].value != "" && 0 < parseInt(inputArr[i].value) && parseInt(inputArr[i].value) < 26){
+
+					$(inputArr[i]).css("background-color","white");
+
+					if(checkArr.length == 0){
+
+						checkArr.push(inputArr[i].value);
+						genArr.splice(genArr.indexOf(parseInt(inputArr[i].value)),1);
+
+					}else{
+
+						for(var n = 0; n < checkArr.length; n++){
+
+							if(inputArr[i].value == checkArr[n]){
+								dupCheck = true;
+								test.innerHTML += "<br/>DUP @ position : " + (i +1)  + " value" + inputArr[i].value + " (yellow)";
+								$(inputArr[i]).css("background-color","yellow");
+								success = false;
+							}
+
+						}
+
+						if(dupCheck == false){
+
+							checkArr.push(inputArr[i].value);
+							genArr.splice(genArr.indexOf(parseInt(inputArr[i].value)),1);
+
+						}else{
+
+							dupCheck = false;
+						}
+
+					}
+
+				}else{
+
+					$(inputArr[i]).css("background-color","#0099FF");
+					test.innerHTML += "Empty cell or Number out of range (blue)</br>";
+					success = false;
+
+				}
+				
+			}
+
+			if(genArr != ""){
+
+				test.innerHTML += "<br/><br/> Remaining Number are " + genArr;
+
+			}
+
+			return success;
+
+			
+
+		}//End of validate();
+
+
+		function generate(){
+
+			var genArr = [];
+
+			for(var i = 1; i < 26; i ++){
+				genArr.push(i);
+			}
+
+			for(var i = 0; i < inputArr.length; i++){
+			
+				var rand = genArr[Math.floor(Math.random()*genArr.length)];
+				inputArr[i].value = rand;
+				genArr.splice(genArr.indexOf(rand),1);
+			
+			}
+
+
+		}//End of generate()
+
+
+		function randPicker(){
+
+			if(successful == true){
+
+				document.getElementById('genBtn').disabled = true;
+				document.getElementById('valBtn').disabled = true;
+
+				if(randArr != ""){
+
+					var picked = randArr[Math.floor(Math.random()*randArr.length)];
+
+					randArr.splice(randArr.indexOf(picked),1);
+
+					randomNum.innerHTML = picked;
+
+					winCheck(picked);
+
+					prevNum.innerHTML += picked + ", ";
+
+					notPicked.innerHTML = randArr.length + " Numbers Left (" + randArr + ")";
+
+				}else{
+
+					notPicked.innerHTML = "";
+
+					randomNum.innerHTML = "All number are picked!";
+
+				}
+			}else{
+				alert("Validate First");
+			}
+
+		}//End of randPicker()
+
+
+		function winCheck(randNum){
+
+			var winCount = 0;
+			var toWinArrRow = [], toWinArrCol = [], toWinArrDia1 = [], toWinArrDia2 = [];
+			var RowW = "", ColW = "", Dia1W = "", Dia2W = "";
+
+			for(var i = 0; i < inputArr.length; i++){
+				
+				if(inputArr[i].value == randNum){
+				
+					$(inputArr[i]).css("background-color","green");
+					var classes = inputArr[i].parentNode.getAttribute("class");
+					var classArr = classes.split(" ");
+
+					for(var n = 0; n < inputArr.length; n++){
+
+						for(var s = 0; s < classArr.length; s++){
+						
+							if(inputArr[n].parentNode.getAttribute("class").includes(classArr[s])){
+
+								if(classArr[s].includes("row")){
+									toWinArrRow.push(inputArr[n]);
+									RowW = classArr[s];
+								}
+								if(classArr[s].includes("col")){
+									toWinArrCol.push(inputArr[n]);
+									ColW = classArr[s];
+								}
+								if(classArr[s].includes("dia1")){
+									toWinArrDia1.push(inputArr[n]);
+									Dia1W = classArr[s];
+								}
+								if(classArr[s].includes("dia2")){
+									toWinArrDia2.push(inputArr[n]);
+									Dia2W = classArr[s];
+								}								
+							
+							}
+						
+						}
+						
+					}
+				
+					if(checkwinArr(toWinArrRow)){
+						result.innerHTML += "<br/>Bingo @ " + RowW;
+					}
+					
+					if(checkwinArr(toWinArrCol)){
+						result.innerHTML += "<br/>Bingo @ " + ColW;
+					}
+					
+					if(checkwinArr(toWinArrDia1)){
+						result.innerHTML += "<br/>Bingo @  " + Dia1W;
+					}	
+
+					if(checkwinArr(toWinArrDia2)){
+						result.innerHTML += "<br/>Bingo @  " + Dia2W;
+					}
+
+				}
+
+			
+			}
+
+		}//End of winCheck()
+
+
+		function checkwinArr(arr){
+
+			var winCount = 0;
+
+			if(arr != ""){
+
+				for(var a = 0; a < arr.length; a++){
+
+					if($(arr[a]).css("background-color") == "rgb(0, 128, 0)" || $(arr[a]).css("background-color") == "rgb(255, 255, 0)"){
+
+						winCount ++;
+					
+					}
+
+				}
+
+				if(winCount == 5){
+					
+					winLine(arr);
+					return true;
+
+				}else{
+					
+					return false;
+				
+				}
+
+			}else{
+				
+				return false;
+			
+			}
+
+		}//End of checkwinArr
+
+		function winLine(arr){
+
+			for(var a = 0; a < arr.length; a++){
+				console.log(arr[a].value);
+
+				if( $(arr[a]).css("background-color") == "rgb(0, 128, 0)"){
+					$(arr[a]).css("background-color","yellow");
+					// console.log(arr[a].value);
+				}
+
+			}
+
+		}//End of winLine
+
+
+		function setVar(){
+
+		}
+
+
+	</script>
+</body>
+</html>

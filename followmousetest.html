@@ -1,0 +1,133 @@
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Mouse Follow</title>
+	<script src="js/jquery-1.9.1.min.js"></script>
+    <style type="text/css">
+    	.noselect {
+		    -webkit-touch-callout: none;
+		    -webkit-user-select: none;
+		    -khtml-user-select: none;
+		    -moz-user-select: none;
+		    -ms-user-select: none;
+		    user-select: none;
+		}
+		#Nfirst{
+			opacity: 1;
+			float:left;
+		}
+		#trollTxt{
+			float: left;
+		}
+		.Ntext{
+			opacity: 0;
+			position: absolute;
+			top:300px;
+		}
+
+    </style>
+</head>
+<body class = "noselect">
+	<p id = "mouseselected">Not Selected</p>
+	<div id="moving_div" style = "position:absolute; width:50px; height:50px; background-color:yellow; opacity:0.6; border-radius: 50px; "></div>
+
+	<div style ="width : 510px; height : 510px; border: 10px solid black; padding: 20px ">
+	<img id = "Nfirst" src= "img/ninja.png" width="50px" height = "50px" ><p id="trollTxt"><-- Hi, there is a ninja here </p>
+	<img class = "Ntext" src= "img/ninja.png" width="50px" height = "50px">
+	</div>
+
+	<script type="text/javascript">
+
+		var $mouseX = 0, $mouseY = 0;
+		var $xp = 0, $yp =0;
+		var count = 0, foundCount = 0;
+		var mouseFolo = false;
+		var Nfound = false, timeDoneN = false;
+
+		// $(document).mousemove(function(e){
+		//     $mouseX = e.pageX - 25;
+		//     $mouseY = e.pageY - 25;    
+		// });
+
+		$('#moving_div').click(function(){
+			count ++;
+			if(count == 2){
+				mouseMoving();
+				mouseFolo = true;
+				document.getElementById('mouseselected').innerHTML = "Selected";
+				$('#moving_div').css("z-index", -1);
+				
+				if(Nfound == true){
+				    $('.Ntext').css("opacity","1");
+				}
+
+			}else if(count == 4){
+				// $(document).off(mouseMoving);
+				$(document).unbind('mousemove');
+				mouseFolo = false;
+				Nfound = true;
+				document.getElementById('mouseselected').innerHTML = "Not Selected";
+			    $('.Ntext').css("opacity","0");
+				count = 0;
+			}
+
+		});
+
+		$("#Nfirst").hover(function(){
+			if(mouseFolo == true){
+				$(this).css("opacity","1");
+				$(this).css("z-index", "-2");
+				document.getElementById('trollTxt').innerHTML = "lel";
+				var CountDownN = setInterval(function() { removeImg("Nfirst"); },3000);
+				if(timeDoneN == true){
+					clearInterval(CountDownN);
+				}
+			}	
+	    }, function(){
+		});
+
+		$(".Ntext").hover(function(){
+			if(mouseFolo == true){
+				$(this).css("opacity","1");
+				teleRandom(this);
+			}	
+	    }, function(){
+		});
+
+		var $loop = setInterval(function(){
+			// change 12 to alter damping higher is slower
+			$xp += (($mouseX - $xp));
+			$yp += (($mouseY - $yp));
+			$("#moving_div").css({left:$xp +'px', top:$yp +'px'});  
+		}, 30);
+
+
+		function mouseMoving(){
+			$(document).mousemove(function(e){
+			    $mouseX = e.pageX - 25;
+			    $mouseY = e.pageY - 25;    
+			});
+		}
+
+		function teleRandom(x){
+
+			hposition = Math.floor((Math.random() * (480- 40)) + 40);
+		    wposition = Math.floor((Math.random() * (480- 40)) + 40);
+		    $(x).css("position", "absolute");
+		    $(x).css("top", wposition + "px");
+		    $(x).css("left",hposition + "px");
+
+		}
+
+		function removeImg(x){
+			var image_x = document.getElementById(x);
+			image_x.parentNode.removeChild(image_x);
+			$(".Ntext").css("opacity","1");
+			$('#moving_div').css("z-index", 0);
+			timeDoneN = true;
+		}
+
+	</script>
+
+</body>
+</html>
