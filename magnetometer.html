@@ -3,10 +3,10 @@ let sensor = new Magnetometer();
 sensor.start();
 
 sensor.onreading = () => {
-    console.log("Magnetic field along the X-axis " + sensor.x);
-    console.log("Magnetic field along the Y-axis " + sensor.y);
-    console.log("Magnetic field along the Z-axis " + sensor.z);
+    alert("Magnetic field along the X-axis " + sensor.x);
+    alert("Magnetic field along the Y-axis " + sensor.y);
+    alert("Magnetic field along the Z-axis " + sensor.z);
 };
 
-sensor.onerror = event => console.log(event.error.name, event.error.message);
+sensor.onerror = event => alert(event.error.name, event.error.message);
 </script>
