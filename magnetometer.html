@@ -2,6 +2,11 @@
 <html>
 <head>
 	<title></title>
+	<style type="text/css">
+		#compass{
+    		border-radius: 50%;
+		}
+	</style>
 </head>
 <body>
 
@@ -10,9 +15,10 @@
 <script>
 let sensor = new Magnetometer();
 sensor.start();
-
 sensor.onreading = () => {
     alert("Magnetic field along the X-axis " + sensor.x);
+    compass = document.getElementById('compass');
+    compass.style.transform = "rotate("+sensor.x+"deg)";
     alert("Magnetic field along the Y-axis " + sensor.y);
     alert("Magnetic field along the Z-axis " + sensor.z);
 };
