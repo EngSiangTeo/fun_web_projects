@@ -14,7 +14,6 @@
 <p>X reading<span id="xreading"></span></p>
 <p>Y reading<span id="yreading"></span></p>
 <p>Z reading<span id="zreading"></span></p>
-<p>D reading<span id="dreading"></span></p>
 <p>D reading<span id="dreading2"></span></p>
 <script>
 let sensor = new Magnetometer();
@@ -27,15 +26,14 @@ sensor.onreading = () => {
     // alert("Magnetic field along the Y-axis " + sensor.y);
     // alert("Magnetic field along the Z-axis " + sensor.z);
 
-	d = Math.atan2(sensor.y, sensor.x);
-
 	d1 = Math.atan2(sensor.y, sensor.x) * 180 / Math.PI;
 
+	if (d1 < 0) d1 += 360;
+	if (d1 > 360) d1 -= 360;
+
     compass = document.getElementById('compass');
-    compass.style.transform = "rotate("+d+"deg)";
+    compass.style.transform = "rotate("+d1+"deg)";
 
-
-    document.getElementById('dreading').innerHTML = d;
     document.getElementById('dreading2').innerHTML = d1;
 };
 
