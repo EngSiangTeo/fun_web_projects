@@ -11,16 +11,22 @@
 <body>
 
 <img src="https://lh3.googleusercontent.com/bGUeJS-wGdOnZNwGSv0Mxztth6hTaV6K5kMsysSLpaVbNnsC4ghu_Vb8qBmeCZ3Dne2H" width="100" height="100" id="compass">
-
+<p>X reading<span id="xreading"></span></p>
+<p>Y reading<span id="yreading"></span></p>
+<p>Z reading<span id="zreading"></span></p>
 <script>
 let sensor = new Magnetometer();
 sensor.start();
 sensor.onreading = () => {
-    alert("Magnetic field along the X-axis " + sensor.x);
     compass = document.getElementById('compass');
     compass.style.transform = "rotate("+sensor.x+"deg)";
-    alert("Magnetic field along the Y-axis " + sensor.y);
-    alert("Magnetic field along the Z-axis " + sensor.z);
+
+    document.getElementById('xreading').innerHTML = sensor.x;
+    document.getElementById('yreading').innerHTML = sensor.y;
+    document.getElementById('zreading').innerHTML = sensor.z;
+    // alert("Magnetic field along the X-axis " + sensor.x);
+    // alert("Magnetic field along the Y-axis " + sensor.y);
+    // alert("Magnetic field along the Z-axis " + sensor.z);
 };
 
 sensor.onerror = event => alert(event.error.name, event.error.message);
