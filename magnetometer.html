@@ -32,7 +32,7 @@ sensor.onreading = () => {
 	if (d1 > 360) d1 -= 360;
 
     compass = document.getElementById('compass');
-    compass.style.transform = "rotate("+d1+"deg)";
+    compass.style.transform = "rotate(-"+d1+"deg)";
 
     document.getElementById('dreading2').innerHTML = d1;
 };
