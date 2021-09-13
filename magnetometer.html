@@ -30,10 +30,8 @@ sensor.onreading = () => {
 	d = Math.atan2(sensor.y,sensor.x);
 
 	d1 = Math.atan2(y, x) * 180 / Math.PI;
-
-	if (d > 360) d -= 360;
-	if (d < 0) d += 360;
-
+	alert(d,d1);
+	
     compass = document.getElementById('compass');
     compass.style.transform = "rotate("+d+"deg)";
 
