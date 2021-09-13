@@ -18,8 +18,8 @@
 let sensor = new Magnetometer();
 sensor.start();
 sensor.onreading = () => {
-    compass = document.getElementById('compass');
-    compass.style.transform = "rotate("+sensor.x+"deg)";
+
+
 
     document.getElementById('xreading').innerHTML = sensor.x;
     document.getElementById('yreading').innerHTML = sensor.y;
@@ -27,6 +27,17 @@ sensor.onreading = () => {
     // alert("Magnetic field along the X-axis " + sensor.x);
     // alert("Magnetic field along the Y-axis " + sensor.y);
     // alert("Magnetic field along the Z-axis " + sensor.z);
+
+    xGaussData = sensor.x ∗ 0.48828125;
+	yGaussData = sensor.y ∗ 0.48828125;
+
+	d = Math.atan(yGaussData/xGaussData) * (180/Math.PI);
+
+	if (d > 360) d -= 360;
+	if (d < 0) d += 360;
+
+    compass = document.getElementById('compass');
+    compass.style.transform = "rotate("+d+"deg)";
 };
 
 sensor.onerror = event => alert(event.error.name, event.error.message);
