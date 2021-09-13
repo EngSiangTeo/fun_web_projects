@@ -27,11 +27,10 @@ sensor.onreading = () => {
     // alert("Magnetic field along the Y-axis " + sensor.y);
     // alert("Magnetic field along the Z-axis " + sensor.z);
 
-	d = Math.atan2(sensor.y,sensor.x);
+	d = Math.atan2(sensor.y, sensor.x);
 
-	d1 = Math.atan2(y, x) * 180 / Math.PI;
-	alert(d,d1);
-	
+	d1 = Math.atan2(sensor.y, sensor.x) * 180 / Math.PI;
+
     compass = document.getElementById('compass');
     compass.style.transform = "rotate("+d+"deg)";
 
