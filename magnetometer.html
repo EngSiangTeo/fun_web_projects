@@ -48,7 +48,7 @@ sensor.onreading = () => {
     angle1 = angle1 * (180 / Math.PI);
     angle1 = angle1 + 90;
     angle1 = (angle1 +360) % 360;
-    angle1 = (angle1 + 180) % 180
+    angle1 = (angle1 + 180) % 360
 
     document.getElementById('dreading3').innerHTML = angle1;
 
