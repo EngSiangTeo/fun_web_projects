@@ -28,7 +28,9 @@ sensor.onreading = () => {
     // alert("Magnetic field along the Y-axis " + sensor.y);
     // alert("Magnetic field along the Z-axis " + sensor.z);
     let angle;
-
+    let x = sensor.x;
+    let y = sensor.y;
+    
     if (Math.atan2(y, x) >= 0) {
         angle = Math.atan2(y, x) * (180 / Math.PI);
     }
