@@ -30,7 +30,7 @@ sensor.onreading = () => {
     let angle;
     let x = sensor.x;
     let y = sensor.y;
-    
+
     if (Math.atan2(y, x) >= 0) {
         angle = Math.atan2(y, x) * (180 / Math.PI);
     }
@@ -42,9 +42,6 @@ sensor.onreading = () => {
     // if (d1 < 0) d1 += 360;
     // if (d1 > 360) d1 -= 360;
 
-    compass = document.getElementById('compass');
-    compass.style.transform = "rotate(-"+angle+"deg)";
-
     document.getElementById('dreading2').innerHTML = angle;
 
     let angle1 = Math.atan2(y, x);;
@@ -53,6 +50,11 @@ sensor.onreading = () => {
     angle1 = (angle1 +360) % 360;
 
     document.getElementById('dreading3').innerHTML = angle1;
+
+    rotate = 360 - angle1;
+
+    compass = document.getElementById('compass');
+    compass.style.transform = "rotate("+rotate+"deg)";
 };
 
 sensor.onerror = event => alert(event.error.name, event.error.message);
