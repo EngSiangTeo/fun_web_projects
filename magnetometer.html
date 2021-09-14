@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title></title>
-	<style type="text/css">
-		#compass{
-    		border-radius: 50%;
-		}
-	</style>
+    <title></title>
+    <style type="text/css">
+        #compass{
+            border-radius: 50%;
+        }
+    </style>
 </head>
 <body>
 
@@ -15,7 +15,9 @@
 <p>Y reading<span id="yreading"></span></p>
 <p>Z reading<span id="zreading"></span></p>
 <p>D reading<span id="dreading2"></span></p>
+<p>Angle reading<span id="dreading3"></span></p>
 <script>
+
 let sensor = new Magnetometer();
 sensor.start();
 sensor.onreading = () => {
@@ -25,16 +27,30 @@ sensor.onreading = () => {
     // alert("Magnetic field along the X-axis " + sensor.x);
     // alert("Magnetic field along the Y-axis " + sensor.y);
     // alert("Magnetic field along the Z-axis " + sensor.z);
+    let angle;
 
-	d1 = Math.atan2(sensor.y, sensor.x) * 180 / Math.PI;
+    if (Math.atan2(y, x) >= 0) {
+        angle = Math.atan2(y, x) * (180 / Math.PI);
+    }
+    else {
+        angle = (Math.atan2(y, x) + 2 * Math.PI) * (180 / Math.PI);
+    }
+    // d1 = Math.atan2(sensor.y, sensor.x) * 180 / Math.PI;
 
-	if (d1 < 0) d1 += 360;
-	if (d1 > 360) d1 -= 360;
+    // if (d1 < 0) d1 += 360;
+    // if (d1 > 360) d1 -= 360;
 
     compass = document.getElementById('compass');
-    compass.style.transform = "rotate(-"+d1+"deg)";
+    compass.style.transform = "rotate(-"+angle+"deg)";
 
-    document.getElementById('dreading2').innerHTML = d1;
+    document.getElementById('dreading2').innerHTML = angle;
+
+    let angle1 = Math.atan2(y, x);;
+    angle1 = angle1 * (180 / Math.PI);
+    angle1 = angle1 + 90;
+    angle1 = (angle1 +360) % 360;
+
+    document.getElementById('dreading3').innerHTML = angle1;
 };
 
 sensor.onerror = event => alert(event.error.name, event.error.message);
