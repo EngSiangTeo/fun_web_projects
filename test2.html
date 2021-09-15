@@ -23,6 +23,7 @@
 <div id="map"></div>
 <img src="https://lh3.googleusercontent.com/bGUeJS-wGdOnZNwGSv0Mxztth6hTaV6K5kMsysSLpaVbNnsC4ghu_Vb8qBmeCZ3Dne2H" width="100" height="100" id="compass">
 <p>Yaw reading<span id="dreading3"></span></p>
+<p>D reading<span id="dreading2"></span></p>
 
 <script>
 let accelerometer = new Accelerometer({frequency: 60});
@@ -56,15 +57,17 @@ sensor.onreading = () => {
   yaw = 180 * Math.atan2(-mag_y,mag_x)/Math.PI;
 
 
-    // let x = sensor.x;
-    // let y = sensor.y;
+    let x = sensor.x;
+    let y = sensor.y;
 
-    // let angle1 = Math.atan2(y, x);;
-    // angle1 = angle1 * (180 / Math.PI);
+    let angle1 = Math.atan2(y, x);;
+    angle1 = angle1 * (180 / Math.PI);
     // angle1 = angle1 + 90;
     // angle1 = (angle1 + 180) % 360
 
   document.getElementById('dreading3').innerHTML = yaw;
+  document.getElementById('dreading2').innerHTML = angle1;
+
 
     // rotate = 360 - angle1;
 
