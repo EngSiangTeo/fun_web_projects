@@ -13,24 +13,27 @@
 
 	sensor.onreading = () => {
 
-		Gx = accelerometer.x;
-		Gy = accelerometer.y;
-		Gz = accelerometer.z;
+		let sinAngle;
+		let cosAngle;
 
-		Bx = sensor.x;
-		By = sensor.y;
-		Bz = sensor.z;
+		let Gx = accelerometer.x;
+		let Gy = accelerometer.y;
+		let Gz = accelerometer.z;
+
+		let Bx = sensor.x;
+		let By = sensor.y;
+		let Bz = sensor.z;
 
 		let DegToRad = (180 / Math.PI);
 		let RadToDeg = (Math.PI / 180);
 
 		let Phi = atan2(Gy, Gz) * RadToDeg;
 		
-		let sinAngle = sin(Phi * DegToRad);
-		let cosAngle = cos(Phi * DegToRad);
+		sinAngle = sin(Phi * DegToRad);
+		cosAngle = cos(Phi * DegToRad);
 		let Bfy = By * cosAngle - Bz * sinAngle;
-		let Bz = By * sinAngle + Bz * cosAngle;
-		let Gz = Gy * sinAngle + Gz * cosAngle;
+		Bz = By * sinAngle + Bz * cosAngle;
+		Gz = Gy * sinAngle + Gz * cosAngle;
 
 		let The = atan(-Gx / Gz) * RadToDeg;
 		sinAngle = sin(The * DegToRad);
