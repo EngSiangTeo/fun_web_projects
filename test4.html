@@ -27,21 +27,21 @@
 		let DegToRad = (180 / Math.PI);
 		let RadToDeg = (Math.PI / 180);
 
-		let Phi = atan2(Gy, Gz) * RadToDeg;
+		let Phi = Math.atan2(Gy, Gz) * RadToDeg;
 		
-		sinAngle = sin(Phi * DegToRad);
-		cosAngle = cos(Phi * DegToRad);
+		sinAngle = Math.sin(Phi * DegToRad);
+		cosAngle = Math.cos(Phi * DegToRad);
 		let Bfy = By * cosAngle - Bz * sinAngle;
 		Bz = By * sinAngle + Bz * cosAngle;
 		Gz = Gy * sinAngle + Gz * cosAngle;
 
-		let The = atan(-Gx / Gz) * RadToDeg;
-		sinAngle = sin(The * DegToRad);
-		cosAngle = cos(The * DegToRad);
+		let The = Math.atan(-Gx / Gz) * RadToDeg;
+		sinAngle = Math.sin(The * DegToRad);
+		cosAngle = Math.cos(The * DegToRad);
 		let Bfx = Bx * cosAngle + Bz * sinAngle;
 		let Bfz = -Bx * sinAngle + Bz * cosAngle;
 
-		let Psi = atan2(-Bfy, Bfx) * RadToDeg;
+		let Psi = Math.atan2(-Bfy, Bfx) * RadToDeg;
 
 		console.log('roll: ' + Phi);
 		console.log('pitch: ' + The);
