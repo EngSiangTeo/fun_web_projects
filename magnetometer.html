@@ -24,8 +24,6 @@
 <img src="https://lh3.googleusercontent.com/bGUeJS-wGdOnZNwGSv0Mxztth6hTaV6K5kMsysSLpaVbNnsC4ghu_Vb8qBmeCZ3Dne2H" width="100" height="100" id="compass">
 <p>X reading<span id="xreading"></span></p>
 <p>Y reading<span id="yreading"></span></p>
-<p>Z reading<span id="zreading"></span></p>
-<p>D reading<span id="dreading2"></span></p>
 <p>Angle reading<span id="dreading3"></span></p>
 <script
   src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB41DRUbKWJHPxaFjMAwdrzWzbVKartNGg&callback=initMap"
@@ -66,26 +64,17 @@ sensor.start();
 sensor.onreading = () => {
     document.getElementById('xreading').innerHTML = sensor.x;
     document.getElementById('yreading').innerHTML = sensor.y;
-    document.getElementById('zreading').innerHTML = sensor.z;
     // alert("Magnetic field along the X-axis " + sensor.x);
     // alert("Magnetic field along the Y-axis " + sensor.y);
     // alert("Magnetic field along the Z-axis " + sensor.z);
     let x = sensor.x;
     let y = sensor.y;
-    // d1 = Math.atan2(sensor.y, sensor.x) * 180 / Math.PI;
-
-    // if (d1 < 0) d1 += 360;
-    // if (d1 > 360) d1 -= 360;
-
-    document.getElementById('dreading2').innerHTML = angle;
 
     let angle = Math.atan2(y, x) * (180 / Math.PI);
-    // angle = angle + 90;
-    // angle = (angle + 180) % 360
-    if(rotate < 0) rotate = 360+ rotate;
-    rotate = 360 - rotate;
+    if(angle < 0) angle = 360 + angle;
+    rotate = 360 - angle;
 
-    document.getElementById('dreading3').innerHTML = angle;
+    document.getElementById('dreading3').innerHTML = rotate;
 
     compass = document.getElementById('compass');
     compass.style.transform = "rotate("+rotate+"deg)";
