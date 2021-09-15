@@ -49,7 +49,8 @@
     console.log('pitch: ' + The);
     console.log('yaw: ' + Psi);
 
-    if(Psi < 0) Psi = 360+ Psi;
+    if(Psi < 0) Psi = 360+ Psi;    
+    Psi = (Psi + 90) % 360
 
     console.log('Angle: ' + Psi);
 
