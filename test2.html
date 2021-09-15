@@ -46,34 +46,44 @@ sensor.onreading = () => {
   accelY = accelerometer.y;
   accelZ = accelerometer.z;
 
-  pitch = 180 * Math.atan2(accelX, Math.sqrt(accelY*accelY + accelZ*accelZ))/Math.PI;
-  roll = 180 * Math.atan2(accelY, Math.sqrt(accelX*accelX + accelZ*accelZ))/Math.PI;
+  // pitch = 180 * Math.atan2(accelX, Math.sqrt(accelY*accelY + accelZ*accelZ))/Math.PI;
+  // roll = 180 * Math.atan2(accelY, Math.sqrt(accelX*accelX + accelZ*accelZ))/Math.PI;
+
+  roll = Math.atan2(accelY,accelZ);
+  pitch = Math.atan2((-accelX),((accelY*sin(roll)) + accelZ*cos(roll)));
 
   magReadX = sensor.x;
   magReadY = sensor.y;
   magReadZ = sensor.z;
 
-  mag_x = magReadX* Math.cos(pitch) + magReadY* Math.sin(roll)*Math.sin(pitch) + magReadZ*Math.cos(roll)*Math.sin(pitch)
-  mag_y = magReadY * Math.cos(roll) - magReadZ * Math.sin(roll)
-  yaw = 180 * Math.atan2(-mag_y,mag_x)/Math.PI;
+
+  yaw = Math.atan2( (magReadZ*Math.sin(roll)-Magy*Math.cos(roll)) , ((magReadX*Math.cos(pitch))+(magReadY*Math.sin(pitch)*Math.sin(roll))+magReadZ*Math.sin(pitch)*Math.cos(roll)) );
+  // mag_x = magReadX* Math.cos(pitch) + magReadY* Math.sin(roll)*Math.sin(pitch) + magReadZ*Math.cos(roll)*Math.sin(pitch)
+  // mag_y = magReadY * Math.cos(roll) - magReadZ * Math.sin(roll)
+  // yaw = 180 * Math.atan2(-mag_y,mag_x)/Math.PI;
 
 
-    let x = sensor.x;
-    let y = sensor.y;
+  yawDegrees = yaw * (180 / Math.PI);
+  pitchDegress = pitch * (180 / Math.PI);
+  rollDegress = roll * (180 / Math.PI);
 
-    let angle1 = Math.atan2(y, x);;
-    angle1 = angle1 * (180 / Math.PI);
-    // angle1 = angle1 + 90;
-    // angle1 = (angle1 + 180) % 360
+  let rotate;
 
-  document.getElementById('dreading3').innerHTML = yaw;
-  document.getElementById('dreading2').innerHTML = angle1;
+  if(rollDegrees < 0 && yawDegrees < 0) {
+    rotate = 360 - (-1 * (yawDegrees + rollDegrees));
+  }else {
+    rotationDegrees = yawDegrees + rollDegrees;
+  }
 
+    rotate = rotate + 90;
+    rotate = (rotate + 180) % 360
 
-    // rotate = 360 - angle1;
+  document.getElementById('dreading3').innerHTML = rotate;
 
-    // compass = document.getElementById('compass');
-    // compass.style.transform = "rotate("+rotate+"deg)";
+  rotate = 360 - rotate;
+
+  compass = document.getElementById('compass');
+  compass.style.transform = "rotate("+rotate+"deg)";
 };
 
 sensor.onerror = event => alert(event.error.name, event.error.message);
