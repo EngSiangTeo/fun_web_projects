@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+</head>
+<body>
+<script type="text/javascript">
+	let sensor = new Magnetometer();
+	let accelerometer = new Accelerometer({frequency: 60});
+
+	sensor.start();
+	accelerometer.start();
+
+	sensor.onreading = () => {
+
+		Gx = accelerometer.x;
+		Gy = accelerometer.y;
+		Gz = accelerometer.z;
+
+		Bx = sensor.x;
+		By = sensor.y;
+		Bz = sensor.z;
+
+		let DegToRad = (180 / Math.PI);
+		let RadToDeg = (Math.PI / 180);
+
+		let Phi = atan2(Gy, Gz) * RadToDeg;
+		
+		let sinAngle = sin(Phi * DegToRad);
+		let cosAngle = cos(Phi * DegToRad);
+		let Bfy = By * cosAngle - Bz * sinAngle;
+		let Bz = By * sinAngle + Bz * cosAngle;
+		let Gz = Gy * sinAngle + Gz * cosAngle;
+
+		let The = atan(-Gx / Gz) * RadToDeg;
+		sinAngle = sin(The * DegToRad);
+		cosAngle = cos(The * DegToRad);
+		let Bfx = Bx * cosAngle + Bz * sinAngle;
+		let Bfz = -Bx * sinAngle + Bz * cosAngle;
+
+		let Psi = atan2(-Bfy, Bfx) * RadToDeg;
+
+		console.log('roll: ' + Phi);
+		console.log('pitch: ' + The);
+		console.log('yaw: ' + Psi);
+	};
+
+	sensor.onerror = event => alert(event.error.name, event.error.message);
+
+</script>
+</body>
+</html>
