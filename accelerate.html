@@ -25,8 +25,11 @@
     }
     //  m/s² / 1000 * (miliseconds - miliseconds)/1000 /3600 => km/h (if I didn't made a mistake)
     speedX += event.acceleration.x / 1000 * ((currentTime - lastTimestamp)/1000)/3600;
+    speedY += event.acceleration.x / 1000 * ((currentTime - lastTimestamp)/1000)/3600;
+    speedZ += event.acceleration.x / 1000 * ((currentTime - lastTimestamp)/1000)/3600;
 
-    console.log(speedX);
+    console.log(speedX,speedY,speedZ);
+    console.log(Math.max(speedX,speedY,speedZ))
     //... same for Y and Z
     lastTimestamp = currentTime;
   }, false);
