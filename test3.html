@@ -22,9 +22,8 @@ sensor.addEventListener('reading', () => {
   let alpha = Math.atan2(2*q[0]*q[1] + 2*q[2]*q[3], 1 - 2*q[1]*q[1] - 2*q[2]*q[2])*(180/Math.PI);
   if(alpha < 0) alpha = 360+ alpha;
 
-  document.getElementById('dreading3').innerHTML = alpha;
-  
   rotate = 360 - alpha;
+  document.getElementById('dreading3').innerHTML = rotate;
   compass = document.getElementById('compass');
   compass.style.transform = "rotate(-"+rotate+"deg)";
 
