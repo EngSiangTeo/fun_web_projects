@@ -57,7 +57,7 @@ sensor.onreading = () => {
   magReadZ = sensor.z;
 
 
-  yaw = Math.atan2( (magReadZ*Math.sin(roll)-Magy*Math.cos(roll)) , ((magReadX*Math.cos(pitch))+(magReadY*Math.sin(pitch)*Math.sin(roll))+magReadZ*Math.sin(pitch)*Math.cos(roll)) );
+  yaw = Math.atan2( (magReadZ*Math.sin(roll)-magReadY*Math.cos(roll)) , ((magReadX*Math.cos(pitch))+(magReadY*Math.sin(pitch)*Math.sin(roll))+magReadZ*Math.sin(pitch)*Math.cos(roll)) );
   // mag_x = magReadX* Math.cos(pitch) + magReadY* Math.sin(roll)*Math.sin(pitch) + magReadZ*Math.cos(roll)*Math.sin(pitch)
   // mag_y = magReadY * Math.cos(roll) - magReadZ * Math.sin(roll)
   // yaw = 180 * Math.atan2(-mag_y,mag_x)/Math.PI;
@@ -72,7 +72,7 @@ sensor.onreading = () => {
   if(rollDegrees < 0 && yawDegrees < 0) {
     rotate = 360 - (-1 * (yawDegrees + rollDegrees));
   }else {
-    rotationDegrees = yawDegrees + rollDegrees;
+    rotate = yawDegrees + rollDegrees;
   }
 
     rotate = rotate + 90;
