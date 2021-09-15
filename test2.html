@@ -50,7 +50,7 @@ sensor.onreading = () => {
   // roll = 180 * Math.atan2(accelY, Math.sqrt(accelX*accelX + accelZ*accelZ))/Math.PI;
 
   roll = Math.atan2(accelY,accelZ);
-  pitch = Math.atan2((-accelX),((accelY*sin(roll)) + accelZ*cos(roll)));
+  pitch = Math.atan2((-accelX),((accelY*Math.sin(roll)) + accelZ*Math.cos(roll)));
 
   magReadX = sensor.x;
   magReadY = sensor.y;
