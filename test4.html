@@ -57,7 +57,7 @@
     rotate = 360 - Psi;
     document.getElementById('dreading3').innerHTML = rotate;
     compass = document.getElementById('compass');
-    compass.style.transform = "rotate(-"+rotate+"deg)";
+    compass.style.transform = "rotate("+rotate+"deg)";
   };
 
   sensor.onerror = event => alert(event.error.name, event.error.message);
