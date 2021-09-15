@@ -53,7 +53,7 @@
 
     console.log('Angle: ' + Psi);
 
-    rotate = 360 - alpha;
+    rotate = 360 - Psi;
     document.getElementById('dreading3').innerHTML = rotate;
     compass = document.getElementById('compass');
     compass.style.transform = "rotate(-"+rotate+"deg)";
