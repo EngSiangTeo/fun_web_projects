@@ -70,16 +70,8 @@ sensor.onreading = () => {
     // alert("Magnetic field along the X-axis " + sensor.x);
     // alert("Magnetic field along the Y-axis " + sensor.y);
     // alert("Magnetic field along the Z-axis " + sensor.z);
-    let angle;
     let x = sensor.x;
     let y = sensor.y;
-
-    if (Math.atan2(y, x) >= 0) {
-        angle = Math.atan2(y, x) * (180 / Math.PI);
-    }
-    else {
-        angle = (Math.atan2(y, x) + 2 * Math.PI) * (180 / Math.PI);
-    }
     // d1 = Math.atan2(sensor.y, sensor.x) * 180 / Math.PI;
 
     // if (d1 < 0) d1 += 360;
@@ -87,14 +79,13 @@ sensor.onreading = () => {
 
     document.getElementById('dreading2').innerHTML = angle;
 
-    let angle1 = Math.atan2(y, x);;
-    angle1 = angle1 * (180 / Math.PI);
-    angle1 = angle1 + 90;
-    angle1 = (angle1 + 180) % 360
+    let angle = Math.atan2(y, x) * (180 / Math.PI);
+    // angle = angle + 90;
+    // angle = (angle + 180) % 360
+    if(rotate < 0) rotate = 360+ rotate;
+    rotate = 360 - rotate;
 
-    document.getElementById('dreading3').innerHTML = angle1;
-
-    rotate = 360 - angle1;
+    document.getElementById('dreading3').innerHTML = angle;
 
     compass = document.getElementById('compass');
     compass.style.transform = "rotate("+rotate+"deg)";
