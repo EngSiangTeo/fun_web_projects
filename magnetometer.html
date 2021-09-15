@@ -6,7 +6,8 @@
         #compass{
             border-radius: 50%;
         }
-/*        #map {
+
+        #map {
             height: 40%;
         }
 
@@ -14,73 +15,83 @@
             height: 100%;
             margin: 0;
             padding: 0;
-        }*/
+        }
     </style>
 </head>
 <body>
 
-<!-- <div id="map"></div> -->
+<div id="map"></div>
 <img src="https://lh3.googleusercontent.com/bGUeJS-wGdOnZNwGSv0Mxztth6hTaV6K5kMsysSLpaVbNnsC4ghu_Vb8qBmeCZ3Dne2H" width="100" height="100" id="compass">
 <p>X reading<span id="xreading"></span></p>
 <p>Y reading<span id="yreading"></span></p>
+<p>Z reading<span id="zreading"></span></p>
+<p>D reading<span id="dreading2"></span></p>
 <p>Angle reading<span id="dreading3"></span></p>
-<!-- <script
+<script
   src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB41DRUbKWJHPxaFjMAwdrzWzbVKartNGg&callback=initMap"
   async
-></script> -->
+></script>
 <script>
 
-// function initMap() {
-//   const myLatLng = { lat: 1.3521, lng: 103.8198 };
-//   const map = new google.maps.Map(document.getElementById("map"), {
-//     zoom: 10,
-//     center: myLatLng,
-//   });
+function initMap() {
+  const myLatLng = { lat: 1.3521, lng: 103.8198 };
+  const map = new google.maps.Map(document.getElementById("map"), {
+    zoom: 10,
+    center: myLatLng,
+  });
 
-//   if (navigator.geolocation) {
-//     position = navigator.geolocation.getCurrentPosition((position) => {
-//           const pos = {
-//             lat: position.coords.latitude,
-//             lng: position.coords.longitude,
-//           };
-//           console.log(pos);
-//           map.setCenter(pos);
-//           map.setZoom(13);
-//           new google.maps.Marker({
-//             position: pos,
-//             map,
-//             title: "My Location",
-//           });
-//     }, (msg)=>{ alert('Please enable your GPS position feature.'); },
+  if (navigator.geolocation) {
+    position = navigator.geolocation.getCurrentPosition((position) => {
+      const pos = {
+        lat: position.coords.latitude,
+        lng: position.coords.longitude,
+      };
+      console.log(pos);
+      map.setCenter(pos);
+      map.setZoom(13);
+      new google.maps.Marker({
+        position: pos,
+        map,
+        title: "My Location",
+      });
+    }, (msg)=>{ alert('Please enable your GPS position feature.'); },
 
-//     { maximumAge: 10000, timeout: 5000, enableHighAccuracy: true});
+    { maximumAge: 10000, timeout: 5000, enableHighAccuracy: true});
 
-//   }
-// }
+  }
+}
 
 let sensor = new Magnetometer();
 sensor.start();
 sensor.onreading = () => {
-    document.getElementById('xreading').innerHTML = sensor.x;
-    document.getElementById('yreading').innerHTML = sensor.y;
-    // alert("Magnetic field along the X-axis " + sensor.x);
-    // alert("Magnetic field along the Y-axis " + sensor.y);
-    // alert("Magnetic field along the Z-axis " + sensor.z);
-    let x = sensor.x;
-    let y = sensor.y;
-    
-    let angle = Math.atan2(y, x);;
-    angle = angle * (180 / Math.PI);
-    angle = angle + 90;
-    angle = (angle + 180) % 360;
-    
-    document.getElementById('dreading3').innerHTML = angle;
-    rotate = 360 - angle;
-
-    compass = document.getElementById('compass');
-    compass.style.transform = "rotate(-"+angle+"deg)";
+  document.getElementById('xreading').innerHTML = sensor.x;
+  document.getElementById('yreading').innerHTML = sensor.y;
+  document.getElementById('zreading').innerHTML = sensor.z;
+  // alert("Magnetic field along the X-axis " + sensor.x);
+  // alert("Magnetic field along the Y-axis " + sensor.y);
+  // alert("Magnetic field along the Z-axis " + sensor.z);
+  let angle;
+  let x = sensor.x;
+  let y = sensor.y;
+  if (Math.atan2(y, x) >= 0) {
+    angle = Math.atan2(y, x) * (180 / Math.PI);
+  }
+  else {
+    angle = (Math.atan2(y, x) + 2 * Math.PI) * (180 / Math.PI);
+  }
+  // d1 = Math.atan2(sensor.y, sensor.x) * 180 / Math.PI;
+  // if (d1 < 0) d1 += 360;
+  // if (d1 > 360) d1 -= 360;
+  document.getElementById('dreading2').innerHTML = angle;
+  let angle1 = Math.atan2(y, x);;
+  angle1 = angle1 * (180 / Math.PI);
+  angle1 = angle1 + 90;
+  angle1 = (angle1 + 180) % 360
+  document.getElementById('dreading3').innerHTML = angle1;
+  rotate = 360 - angle1;
+  compass = document.getElementById('compass');
+  compass.style.transform = "rotate("+rotate+"deg)";
 };
-
 sensor.onerror = event => alert(event.error.name, event.error.message);
 </script>
 </body>
