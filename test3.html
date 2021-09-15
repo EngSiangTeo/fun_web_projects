@@ -9,6 +9,7 @@
     </style>
 </head>
 <body>
+<p>D reading<span id="dreading3"></span></p>
 <img src="https://lh3.googleusercontent.com/bGUeJS-wGdOnZNwGSv0Mxztth6hTaV6K5kMsysSLpaVbNnsC4ghu_Vb8qBmeCZ3Dne2H" width="100" height="100" id="compass">
 <script type="text/javascript">
 const options = { frequency: 60, referenceFrame: 'device' };
@@ -23,6 +24,8 @@ sensor.addEventListener('reading', () => {
   rotate = 360 - alpha;
   compass = document.getElementById('compass');
   compass.style.transform = "rotate("+rotate+"deg)";
+  
+  document.getElementById('dreading3').innerHTML = rotate;
 });
 sensor.addEventListener('error', error => {
   if (event.error.name == 'NotReadableError') {
