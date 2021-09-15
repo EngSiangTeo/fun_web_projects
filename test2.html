@@ -26,7 +26,8 @@
 <p>D reading<span id="dreading2"></span></p>
 
 <script>
-let accelerometer = new Accelerometer({frequency: 60});
+// let accelerometer = new Accelerometer({frequency: 60});
+let accelerometer = new LinearAccelerationSensor({frequency: 60});
 accelerometer.start();
 
 let sensor = new Magnetometer();
